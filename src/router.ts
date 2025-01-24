@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { body } from "express-validator";
-import { createAccount } from "./handlers";
+import { createAccount, login } from "./handlers";
 import { handleInputErrors } from "./middleware/validation";
 
 const router = Router()
@@ -21,6 +21,17 @@ router.post('/auth/register',
         .withMessage("Password length must be between 8 and 20 characters"),
     handleInputErrors,
     createAccount
+)
+
+router.post('/auth/login',
+    body('email')
+        .isEmail()
+        .withMessage('The email is not valid'),
+    body('password')
+        .notEmpty()
+        .withMessage("Empty password"),
+    handleInputErrors,
+    login
 )
 
 export default router
